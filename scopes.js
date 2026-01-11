@@ -151,11 +151,11 @@ class VideoScopes {
         
         for (let i = 0; i < intensityMap.length; i++) {
             if (intensityMap[i] > 0) {
-                const intensity = Math.min(1, (intensityMap[i] / maxIntensity) * 3);
+                const intensity = Math.min(1, (intensityMap[i] / maxIntensity) * 8);
                 const pixelIndex = i * 4;
                 
-                // Green phosphor color
-                pixels[pixelIndex] = Math.floor(intensity * 100);     // R
+                // Bright green phosphor color for better visibility
+                pixels[pixelIndex] = Math.floor(intensity * 150);     // R
                 pixels[pixelIndex + 1] = Math.floor(intensity * 255); // G
                 pixels[pixelIndex + 2] = Math.floor(intensity * 100); // B
                 pixels[pixelIndex + 3] = 255;                          // A
@@ -220,21 +220,21 @@ class VideoScopes {
             
             for (let i = 0; i < intensityMap.length; i++) {
                 if (intensityMap[i] > 0) {
-                    const intensity = Math.min(1, (intensityMap[i] / maxIntensity) * 3);
+                    const intensity = Math.min(1, (intensityMap[i] / maxIntensity) * 8);
                     const pixelIndex = i * 4;
                     
-                    // Channel-specific colors
+                    // Channel-specific colors - brighter for better visibility
                     if (ch === 0) { // Red
                         pixels[pixelIndex] = Math.floor(intensity * 255);
-                        pixels[pixelIndex + 1] = Math.floor(intensity * 50);
-                        pixels[pixelIndex + 2] = Math.floor(intensity * 50);
-                    } else if (ch === 1) { // Green
-                        pixels[pixelIndex] = Math.floor(intensity * 50);
-                        pixels[pixelIndex + 1] = Math.floor(intensity * 255);
-                        pixels[pixelIndex + 2] = Math.floor(intensity * 50);
-                    } else { // Blue
-                        pixels[pixelIndex] = Math.floor(intensity * 80);
                         pixels[pixelIndex + 1] = Math.floor(intensity * 80);
+                        pixels[pixelIndex + 2] = Math.floor(intensity * 80);
+                    } else if (ch === 1) { // Green
+                        pixels[pixelIndex] = Math.floor(intensity * 80);
+                        pixels[pixelIndex + 1] = Math.floor(intensity * 255);
+                        pixels[pixelIndex + 2] = Math.floor(intensity * 80);
+                    } else { // Blue
+                        pixels[pixelIndex] = Math.floor(intensity * 100);
+                        pixels[pixelIndex + 1] = Math.floor(intensity * 120);
                         pixels[pixelIndex + 2] = Math.floor(intensity * 255);
                     }
                     pixels[pixelIndex + 3] = 255;
@@ -277,8 +277,15 @@ class VideoScopes {
             const px = Math.floor(x);
             const py = Math.floor(y);
             
-            if (px >= 0 && px < size && py >= 0 && py < size) {
-                intensityMap[py * size + px]++;
+            // Plot a 3x3 point for better visibility
+            for (let dy = -1; dy <= 1; dy++) {
+                for (let dx = -1; dx <= 1; dx++) {
+                    const plotX = px + dx;
+                    const plotY = py + dy;
+                    if (plotX >= 0 && plotX < size && plotY >= 0 && plotY < size) {
+                        intensityMap[plotY * size + plotX]++;
+                    }
+                }
             }
         }
         
@@ -295,13 +302,13 @@ class VideoScopes {
         
         for (let i = 0; i < intensityMap.length; i++) {
             if (intensityMap[i] > 0) {
-                const intensity = Math.min(1, (intensityMap[i] / maxIntensity) * 5);
+                const intensity = Math.min(1, (intensityMap[i] / maxIntensity) * 10);
                 const pixelIndex = i * 4;
                 
-                // Cyan/green phosphor
-                pixels[pixelIndex] = Math.floor(intensity * 50);
+                // Bright cyan/green phosphor for better visibility
+                pixels[pixelIndex] = Math.floor(intensity * 100);
                 pixels[pixelIndex + 1] = Math.floor(intensity * 255);
-                pixels[pixelIndex + 2] = Math.floor(intensity * 150);
+                pixels[pixelIndex + 2] = Math.floor(intensity * 200);
                 pixels[pixelIndex + 3] = 255;
             }
         }
@@ -334,24 +341,24 @@ class VideoScopes {
         const barWidth = width / 256;
         
         // Draw each channel with transparency for overlap visualization
-        ctx.globalAlpha = 0.6;
+        ctx.globalAlpha = 0.7;
         
         // Red channel
-        ctx.fillStyle = '#ff0000';
+        ctx.fillStyle = '#ff4444';
         for (let i = 0; i < 256; i++) {
             const barHeight = (histogram.r[i] / maxVal) * (height - 20);
             ctx.fillRect(i * barWidth, height - barHeight, barWidth, barHeight);
         }
         
         // Green channel
-        ctx.fillStyle = '#00ff00';
+        ctx.fillStyle = '#44ff44';
         for (let i = 0; i < 256; i++) {
             const barHeight = (histogram.g[i] / maxVal) * (height - 20);
             ctx.fillRect(i * barWidth, height - barHeight, barWidth, barHeight);
         }
         
         // Blue channel
-        ctx.fillStyle = '#0066ff';
+        ctx.fillStyle = '#4488ff';
         for (let i = 0; i < 256; i++) {
             const barHeight = (histogram.b[i] / maxVal) * (height - 20);
             ctx.fillRect(i * barWidth, height - barHeight, barWidth, barHeight);
@@ -360,13 +367,13 @@ class VideoScopes {
         ctx.globalAlpha = 1.0;
         
         // Draw graticule/scale markers
-        ctx.strokeStyle = '#333';
+        ctx.strokeStyle = '#555';
         ctx.lineWidth = 1;
         
         // Vertical lines at 0, 64, 128, 192, 255
         const markers = [0, 64, 128, 192, 255];
-        ctx.font = '10px sans-serif';
-        ctx.fillStyle = '#666';
+        ctx.font = '11px sans-serif';
+        ctx.fillStyle = '#888';
         
         for (const marker of markers) {
             const x = (marker / 255) * width;
@@ -382,10 +389,10 @@ class VideoScopes {
      * Draw graticule lines for waveform and parade
      */
     drawGraticule(ctx, width, height, type) {
-        ctx.strokeStyle = '#333';
+        ctx.strokeStyle = '#555';
         ctx.lineWidth = 1;
-        ctx.font = '10px sans-serif';
-        ctx.fillStyle = '#555';
+        ctx.font = '11px sans-serif';
+        ctx.fillStyle = '#888';
         
         // Horizontal lines at key IRE/percentage levels
         const levels = [0, 25, 50, 75, 100];
@@ -403,7 +410,7 @@ class VideoScopes {
         
         // For parade, draw channel separators
         if (type === 'parade') {
-            ctx.strokeStyle = '#444';
+            ctx.strokeStyle = '#666';
             ctx.setLineDash([5, 5]);
             
             const channelWidth = width / 3;
@@ -416,12 +423,12 @@ class VideoScopes {
             
             ctx.setLineDash([]);
             
-            // Channel labels
-            ctx.fillStyle = '#ff6666';
+            // Channel labels - brighter colors
+            ctx.fillStyle = '#ff8888';
             ctx.fillText('R', channelWidth / 2, 15);
-            ctx.fillStyle = '#66ff66';
+            ctx.fillStyle = '#88ff88';
             ctx.fillText('G', channelWidth * 1.5, 15);
-            ctx.fillStyle = '#6666ff';
+            ctx.fillStyle = '#8888ff';
             ctx.fillText('B', channelWidth * 2.5, 15);
         }
     }
@@ -430,7 +437,7 @@ class VideoScopes {
      * Draw vectorscope graticule with color targets and skin tone line
      */
     drawVectorscopeGraticule(ctx, center, radius) {
-        ctx.strokeStyle = '#333';
+        ctx.strokeStyle = '#555';
         ctx.lineWidth = 1;
         
         // Draw outer circle
@@ -456,15 +463,15 @@ class VideoScopes {
         // Draw color target boxes (standard vectorscope targets)
         // These represent the standard color bar positions
         const colorTargets = [
-            { name: 'R', angle: -14, dist: 0.9, color: '#ff0000' },   // Red
-            { name: 'Mg', angle: -59, dist: 0.9, color: '#ff00ff' },  // Magenta
-            { name: 'B', angle: -104, dist: 0.9, color: '#0000ff' },  // Blue
-            { name: 'Cy', angle: 166, dist: 0.9, color: '#00ffff' },  // Cyan
-            { name: 'G', angle: 121, dist: 0.9, color: '#00ff00' },   // Green
-            { name: 'Yl', angle: 76, dist: 0.9, color: '#ffff00' }    // Yellow
+            { name: 'R', angle: -14, dist: 0.9, color: '#ff4444' },   // Red
+            { name: 'Mg', angle: -59, dist: 0.9, color: '#ff44ff' },  // Magenta
+            { name: 'B', angle: -104, dist: 0.9, color: '#4444ff' },  // Blue
+            { name: 'Cy', angle: 166, dist: 0.9, color: '#44ffff' },  // Cyan
+            { name: 'G', angle: 121, dist: 0.9, color: '#44ff44' },   // Green
+            { name: 'Yl', angle: 76, dist: 0.9, color: '#ffff44' }    // Yellow
         ];
         
-        ctx.font = '10px sans-serif';
+        ctx.font = '11px sans-serif';
         
         for (const target of colorTargets) {
             const angleRad = target.angle * (Math.PI / 180);
@@ -474,16 +481,16 @@ class VideoScopes {
             // Draw small target box
             ctx.strokeStyle = target.color;
             ctx.lineWidth = 2;
-            ctx.strokeRect(x - 5, y - 5, 10, 10);
+            ctx.strokeRect(x - 6, y - 6, 12, 12);
             
             // Label
             ctx.fillStyle = target.color;
-            ctx.fillText(target.name, x + 8, y + 3);
+            ctx.fillText(target.name, x + 10, y + 4);
         }
         
         // Draw skin tone line (I-line, approximately 123 degrees)
         // This is the crucial line for checking skin tones
-        ctx.strokeStyle = '#ff9933';
+        ctx.strokeStyle = '#ffaa44';
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 3]);
         
@@ -497,8 +504,8 @@ class VideoScopes {
         
         // Label for skin tone line
         ctx.setLineDash([]);
-        ctx.fillStyle = '#ff9933';
-        ctx.font = '11px sans-serif';
+        ctx.fillStyle = '#ffaa44';
+        ctx.font = '12px sans-serif';
         const labelX = center + Math.cos(this.skinToneAngle) * (radius + 5);
         const labelY = center - Math.sin(this.skinToneAngle) * (radius + 5);
         ctx.fillText('Skin', labelX - 15, labelY - 5);

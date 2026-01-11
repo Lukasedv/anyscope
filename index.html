@@ -31,13 +31,18 @@
                     <label><input type="checkbox" id="showHistogram" checked> Histogram</label>
                 </div>
             </div>
+            <button id="resetZone" class="btn btn-reset" disabled>
+                <span class="icon">⬚</span>
+                Reset Zone
+            </button>
         </div>
         
         <div class="main-content">
             <div class="preview-section">
-                <h2>Source Preview</h2>
-                <div class="video-container">
+                <h2>Source Preview <span class="zone-hint">(Click and drag to select zone)</span></h2>
+                <div class="video-container" id="videoContainer">
                     <video id="sourceVideo" autoplay playsinline muted></video>
+                    <canvas id="selectionCanvas" class="selection-overlay"></canvas>
                     <canvas id="captureCanvas" style="display: none;"></canvas>
                     <div class="placeholder" id="videoPlaceholder">
                         <p>Click "Start Screen Capture" to begin</p>
