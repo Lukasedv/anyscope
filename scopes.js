@@ -141,7 +141,13 @@ class VideoScopes {
         const imageData = ctx.getImageData(0, 0, width, height);
         const pixels = imageData.data;
         
-        const maxIntensity = Math.max(...intensityMap, 1);
+        // Find max intensity without using spread operator (which causes stack overflow on large arrays)
+        let maxIntensity = 1;
+        for (let i = 0; i < intensityMap.length; i++) {
+            if (intensityMap[i] > maxIntensity) {
+                maxIntensity = intensityMap[i];
+            }
+        }
         
         for (let i = 0; i < intensityMap.length; i++) {
             if (intensityMap[i] > 0) {
@@ -204,7 +210,13 @@ class VideoScopes {
             // Render this channel
             const imageData = ctx.getImageData(offsetX, 0, channelWidth, height);
             const pixels = imageData.data;
-            const maxIntensity = Math.max(...intensityMap, 1);
+            // Find max intensity without using spread operator (which causes stack overflow on large arrays)
+            let maxIntensity = 1;
+            for (let j = 0; j < intensityMap.length; j++) {
+                if (intensityMap[j] > maxIntensity) {
+                    maxIntensity = intensityMap[j];
+                }
+            }
             
             for (let i = 0; i < intensityMap.length; i++) {
                 if (intensityMap[i] > 0) {
@@ -273,7 +285,13 @@ class VideoScopes {
         // Render intensity map
         const imageData = ctx.getImageData(0, 0, size, size);
         const pixels = imageData.data;
-        const maxIntensity = Math.max(...intensityMap, 1);
+        // Find max intensity without using spread operator (which causes stack overflow on large arrays)
+        let maxIntensity = 1;
+        for (let i = 0; i < intensityMap.length; i++) {
+            if (intensityMap[i] > maxIntensity) {
+                maxIntensity = intensityMap[i];
+            }
+        }
         
         for (let i = 0; i < intensityMap.length; i++) {
             if (intensityMap[i] > 0) {
