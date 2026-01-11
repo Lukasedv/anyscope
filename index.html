@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnyScope - Desktop Video Scopes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>AnyScope</h1>
+            <p class="subtitle">Professional Video Scopes for Your Desktop</p>
+        </header>
+        
+        <div class="controls">
+            <button id="startCapture" class="btn btn-primary">
+                <span class="icon">📺</span>
+                Start Screen Capture
+            </button>
+            <button id="stopCapture" class="btn btn-secondary" disabled>
+                <span class="icon">⏹</span>
+                Stop Capture
+            </button>
+            <div class="scope-selector">
+                <label>Active Scopes:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="showWaveform" checked> Waveform</label>
+                    <label><input type="checkbox" id="showParade" checked> Parade</label>
+                    <label><input type="checkbox" id="showVectorscope" checked> Vectorscope</label>
+                    <label><input type="checkbox" id="showHistogram" checked> Histogram</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="preview-section">
+                <h2>Source Preview</h2>
+                <div class="video-container">
+                    <video id="sourceVideo" autoplay playsinline muted></video>
+                    <canvas id="captureCanvas" style="display: none;"></canvas>
+                    <div class="placeholder" id="videoPlaceholder">
+                        <p>Click "Start Screen Capture" to begin</p>
+                        <p class="hint">You can select a window, browser tab, or entire screen</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scopes-section">
+                <div class="scope-grid">
+                    <div class="scope-container" id="waveformContainer">
+                        <h3>Waveform <span class="scope-info">(Luminance)</span></h3>
+                        <canvas id="waveformCanvas" width="512" height="256"></canvas>
+                    </div>
+                    
+                    <div class="scope-container" id="paradeContainer">
+                        <h3>Parade <span class="scope-info">(RGB Channels)</span></h3>
+                        <canvas id="paradeCanvas" width="512" height="256"></canvas>
+                    </div>
+                    
+                    <div class="scope-container" id="vectorscopeContainer">
+                        <h3>Vectorscope <span class="scope-info">(Color Balance)</span></h3>
+                        <canvas id="vectorscopeCanvas" width="300" height="300"></canvas>
+                    </div>
+                    
+                    <div class="scope-container" id="histogramContainer">
+                        <h3>Histogram <span class="scope-info">(Brightness Distribution)</span></h3>
+                        <canvas id="histogramCanvas" width="512" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>AnyScope - View professional video scopes on any part of your desktop</p>
+        </footer>
+    </div>
+    
+    <script src="scopes.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
