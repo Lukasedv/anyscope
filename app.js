@@ -4,6 +4,11 @@
  */
 
 class AnyScope {
+    // Constants for zone selection
+    static MIN_ZONE_SIZE = 0.02; // Minimum zone size as fraction (2%)
+    static MIN_ZONE_PIXELS = 10; // Minimum zone size in pixels
+    static SELECTION_HANDLE_SIZE = 8; // Size of corner handles in pixels
+    
     constructor() {
         this.video = document.getElementById('sourceVideo');
         this.captureCanvas = document.getElementById('captureCanvas');
@@ -150,7 +155,7 @@ class AnyScope {
         this.isSelecting = false;
         
         // If the selection is too small, reset it
-        if (this.selectedZone && (this.selectedZone.width < 0.02 || this.selectedZone.height < 0.02)) {
+        if (this.selectedZone && (this.selectedZone.width < AnyScope.MIN_ZONE_SIZE || this.selectedZone.height < AnyScope.MIN_ZONE_SIZE)) {
             this.selectedZone = null;
         }
         
@@ -202,7 +207,7 @@ class AnyScope {
         // Draw corner handles
         ctx.setLineDash([]);
         ctx.fillStyle = '#00d4ff';
-        const handleSize = 8;
+        const handleSize = AnyScope.SELECTION_HANDLE_SIZE;
         
         // Top-left
         ctx.fillRect(selX - handleSize/2, selY - handleSize/2, handleSize, handleSize);
@@ -350,8 +355,8 @@ class AnyScope {
                     zoneH = Math.floor(this.selectedZone.height * srcHeight);
                     
                     // Ensure minimum size
-                    zoneW = Math.max(zoneW, 10);
-                    zoneH = Math.max(zoneH, 10);
+                    zoneW = Math.max(zoneW, AnyScope.MIN_ZONE_PIXELS);
+                    zoneH = Math.max(zoneH, AnyScope.MIN_ZONE_PIXELS);
                 }
                 
                 // Scale down for performance (analyze at lower resolution)
