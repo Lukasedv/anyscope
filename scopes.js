@@ -469,12 +469,11 @@ class VideoScopes {
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 3]);
         
-        const skinAngle = 123 * (Math.PI / 180); // Standard skin tone angle
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.lineTo(
-            center + Math.cos(skinAngle) * radius,
-            center - Math.sin(skinAngle) * radius
+            center + Math.cos(this.skinToneAngle) * radius,
+            center - Math.sin(this.skinToneAngle) * radius
         );
         ctx.stroke();
         
@@ -482,8 +481,8 @@ class VideoScopes {
         ctx.setLineDash([]);
         ctx.fillStyle = '#ff9933';
         ctx.font = '11px sans-serif';
-        const labelX = center + Math.cos(skinAngle) * (radius + 5);
-        const labelY = center - Math.sin(skinAngle) * (radius + 5);
+        const labelX = center + Math.cos(this.skinToneAngle) * (radius + 5);
+        const labelY = center - Math.sin(this.skinToneAngle) * (radius + 5);
         ctx.fillText('Skin', labelX - 15, labelY - 5);
         
         ctx.lineWidth = 1;
